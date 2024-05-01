@@ -1,0 +1,13 @@
+$TTL 604800
+kts.domain.    IN    SOA    dns-kts.kts.domain. root.kts.domain. (
+                20052024        ; Serial
+                600             ; Refresh
+                3600            ; Retry
+                1w              ; Expire
+                360             ; Minimum TTL
+                )
+        IN      NS  dns-kts.kts.domain.
+dns     IN      A   192.168.0.21
+wiki    IN      A   192.168.0.22
+dhcp    IN      A   192.168.0.23
+proxy   IN      A   192.168.0.24
