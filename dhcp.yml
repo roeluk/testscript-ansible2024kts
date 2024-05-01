@@ -1,0 +1,17 @@
+---
+- name: dhcp config
+  hosts: DHCP-KTS
+  become: true
+  tasks:
+    - name: install dhcp
+      dnf:
+        name: dhcp
+      
+    - name: copy dhcpd.conf file
+      template:
+        src: dhcpd.conf.j2
+        dest: /etc/dhcp/dhcpd.conf
+    
+    - name: restart dhcp
+      command: systemctl enable --now dhcpd
+      

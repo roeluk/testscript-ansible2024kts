@@ -1,0 +1,46 @@
+---
+- name: dns config
+  hosts: DNS-KTS
+  become: true
+  tasks:
+    - name: install bind
+      dnf:
+        name: bind
+    
+    - name: install bind-utils
+      dnf:
+        name: bind-utils
+
+    - name: make directory for zone
+      command: mkdir /var/named/master
+    
+    - name: copy zone zone file
+      template:
+        src: zone.kts.conf.j2
+        dest: /var/named/master/zone.kts.conf
+        owner: named
+        group: named
+        mode: '775'
+    
+    - name: copy zone zone file
+      template:
+        src: rev.zone.kts.conf.j2
+        dest: /var/named/master/rev.zone.kts.conf
+        owner: named
+        group: named
+        mode: '775'
+    
+    - name: grant privileges on named for zone
+      command: chown named:named /var/named/master/zone.kts.conf
+
+    - name: grant privileges on named for reverse zone
+      command: chown named:named /var/named/master/rev.zone.kts.conf
+
+    - name: mode for named for zone
+      command: chmod 775 /var/named/master/zone.kts.conf
+
+    - name: mode for on named for reverse zone
+      command: chmod 775 /var/named/master/rev.zone.kts.conf
+
+    - name: start bind
+      command: systemctl enable --now named

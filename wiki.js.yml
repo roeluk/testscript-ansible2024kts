@@ -1,0 +1,52 @@
+---
+- name: wiki.js install
+  hosts: "wiki ip address"
+  become: true
+  tasks:
+    - name: install nodejs
+      dnf:
+        name: nodejs
+    
+    - name: install mariadb-server
+      dnf:
+        name: mariadb-server
+      
+    - name: install httpd
+      dnf:
+        name: httpd
+    
+    - name: install phpmyadmin
+      dnf:
+        name: phpmyadmin
+    
+    - name: start mariadb
+      command: systemctl enable --now mariadb
+
+    - name: start httpd
+      command: systemctl enable --now httpd
+
+    - name: mkdir for wikijs
+      command: mkdir /var/wikijs
+
+    - name: download wikijs
+      command: wget -P /var/wikijs https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
+    
+    - name: unpack wikijs
+      command: tar xzf wiki-js.tar.gz -C /var/wikijs
+    
+    - name: make
+      command: touch config.yml
+    
+    - name: make service wikijs
+      template:
+        src: wikijs.service.j2
+        dest: /etc/systemd/system/wiki.service
+        owner: root
+        group: root
+        mode: '775'
+      
+    - name: daemon reload
+      command: systemctl daemon-reload
+    
+    - name: enable wikijs
+      command: systemctl enable wikijs

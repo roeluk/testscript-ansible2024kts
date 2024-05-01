@@ -1,0 +1,10 @@
+subnet 192.168.0.0 netmask 255.255.255.0 {
+   range 192.168.0.40 192.168.0.240;
+   option domain-name-servers 192.168.0.21;
+   option domain-name "kts.domain";
+   option routers 192.168.0.1;
+   option broadcast-address 192.168.0.255;
+   default-lease-time 600;
+   max-lease-time 7200;
+ }
+ 
